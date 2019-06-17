@@ -90,7 +90,7 @@ func (s *Server) handleQuery(m *dns.Msg) {
 		msg.RecursionDesired = true
 
 		r, _, err := c.Exchange(msg, net.JoinHostPort("8.8.8.8", "53"))
-		if r == nil {
+		if err != nil {
 			log.Errorf("*** error: %s\n", err.Error())
 			return
 		}
