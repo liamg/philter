@@ -8,7 +8,7 @@ test:
 run: build
 	./philter
 
-travis:
+travis: test
 	./scripts/travis.sh
 	
 pi: travis
