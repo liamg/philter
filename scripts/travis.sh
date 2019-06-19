@@ -2,16 +2,10 @@
 
 set -e
 
-if [[ $# -eq 0 ]]; then
-	git fetch --tags
-	version=`git describe --tags`
-else
-    version="$1"
-fi
+version='branch'
 
-if [[ "$version" == "" ]]; then
-	echo "Error: Cannot determine version"
-	exit 1
+if [[ ! -z "$TRAVIS_TAG" ]]; then
+	version="${TRAVIS_TAG}"
 fi
 
 mkdir -p build
