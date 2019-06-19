@@ -72,7 +72,7 @@ func fromReader(r io.Reader) (*Blacklist, error) {
 }
 
 func (b *Blacklist) Includes(domain string) bool {
-	domain = "." + strings.TrimSuffix(domain, ".")
+	domain = strings.TrimSuffix(domain, ".")
 	for {
 		_, ok := b.entries[domain]
 		if ok {
