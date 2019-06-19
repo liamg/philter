@@ -152,7 +152,7 @@ func Update() (bool, error) {
 	}
 	defer res2.Body.Close()
 
-	err = update.Apply(res2.Body, update.Options{})
+	err = update.Apply(res2.Body, update.Options{TargetPath: "/usr/bin/philter"})
 	return err == nil, err
 
 }

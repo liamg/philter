@@ -40,6 +40,7 @@ func main() {
 			}
 			if done {
 				log.Infof("update applied - restarting...")
+				s.Stop()
 				close(c)
 				return
 			}
