@@ -124,6 +124,7 @@ func Update() (bool, error) {
 	if err != nil {
 		return false, err
 	}
+	req.Header.Add("Accept
 
 	res, err := client.Do(req)
 	if err != nil {
