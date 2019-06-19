@@ -66,7 +66,7 @@ func (s *Server) handleQuery(m *dns.Msg) {
 
 		answer, found := s.cache.Read(q)
 		if found {
-			log.Printf("Query for %s returned from cache", q.Name)
+			log.Printf("cache <- %s ", q.Name)
 			m.Answer = answer
 			continue
 		}
@@ -75,7 +75,7 @@ func (s *Server) handleQuery(m *dns.Msg) {
 			if s.blacklist != nil && s.blacklist.Includes(q.Name) {
 				rr, err := dns.NewRR(fmt.Sprintf("%s A 127.0.0.1", q.Name))
 				if err == nil {
-					log.Printf("Query for %s blocked", q.Name)
+					log.Printf("block <- %s", q.Name)
 					m.Answer = append(m.Answer, rr)
 					continue
 				}
@@ -84,7 +84,7 @@ func (s *Server) handleQuery(m *dns.Msg) {
 			if s.blacklist != nil && s.blacklist.Includes(q.Name) {
 				rr, err := dns.NewRR(fmt.Sprintf("%s AAAA ::1", q.Name))
 				if err == nil {
-					log.Printf("Query for %s blocked", q.Name)
+					log.Printf("block <- %s", q.Name)
 					m.Answer = append(m.Answer, rr)
 					continue
 				}
@@ -107,7 +107,7 @@ func (s *Server) handleQuery(m *dns.Msg) {
 			return
 		}
 
-		log.Printf("Query for %s allowed", q.Name)
+		log.Printf("allow <- %s", q.Name)
 		m.Answer = r.Answer
 		go s.cache.Write(q, r.Answer)
 	}

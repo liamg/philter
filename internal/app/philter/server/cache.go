@@ -5,7 +5,6 @@ import (
 	"time"
 
 	"github.com/miekg/dns"
-	log "github.com/sirupsen/logrus"
 )
 
 type Cache struct {
@@ -44,7 +43,6 @@ func (c *Cache) cleanse() {
 	for key, val := range c.cache {
 		if now.After(val.expires) {
 			c.lock.Lock()
-			log.Infof("Removing expired item from cache: %s", key)
 			delete(c.cache, key)
 			c.lock.Unlock()
 		}
