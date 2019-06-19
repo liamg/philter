@@ -19,7 +19,7 @@ func main() {
 	log.Infof("Loading blacklist from disk...")
 	blacklist, err := blacklist.FromFile("/var/lib/philter/blacklist.txt")
 	if err != nil {
-		//panic(err)
+		panic(err)
 	}
 
 	c := make(chan os.Signal, 1)
