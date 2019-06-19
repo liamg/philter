@@ -1,0 +1,20 @@
+language: go
+script:
+- make travis
+env:
+  global:
+  - GO111MODULE=on
+deploy:
+  - provider: releases
+    skip_cleanup: true
+    api_key:
+      secure: "pALa4zVBRvzdYj5c+1eHIlnWnwVssbRKaDE9icZe3ZSaMVS8jiHjw7sgceqRFO8bFSJMKEb8AjfWYZ78TXKXaeOf/r2FeWTKnMu3gOrH4CZklsCqNLN0BvnIQdf58sixaFg2INRfMRVr0R+82Pe5+A10wQ9tXbwP60R+u+FkaUUIQKEZMlsdjyCMERB6SIVfDTneiyq59TUBG2ATAxGmLDMpHy8Z/nRR2bntN17HrBUT7Ev1W8yuix4XJpH4MBjrDQzlzJivwv/B+3gp38yZqvyvJAPA7gfejqpp4Dnl5bxNZ5fojkjsVIH//zcDEnoO+QzZHYXSZ3tFLEnfinXnOvLOW7aDeRAwJg3ozq3lkB1iatfBjRAgcK/mALqDE/lGJMDZWx0ROKzd4kCvGwl0Kx55yPwFk2Rezy6Gc793B8vJz9e0KAFMw1gMzNX5uLCQZvYVaVGIu2fA+JniBNo7oORl1Qzfh2fTfnKbTgfT9rFehTmAJEz/RvFdscrJ0q6LYCuvhboPtAuOi42gT/pxTjfBGHeUsUnimYkJ0aiUGaySl+F3hUrwetQ3RZCoXWTe6pdhv0lRPA06jSjBdKXbTtOgCXugZnKotvLhLIj1pF7OE9iDNox+cP7RuBHuPfiQ0+YZGW7vgMrlcigi1XL+rFQZJdZKfKunHfd+dPnsxSs="
+    name: "philter $TRAVIS_TAG"
+    file:
+      - build/philter-linux-arm5
+      - build/philter-linux-amd64
+      - build/blacklist.txt
+      - build/philter.service
+    on:
+      repo: liamg/philter
+      tags: true

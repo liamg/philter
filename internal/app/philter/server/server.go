@@ -27,17 +27,24 @@ func (s *Server) Stop() {
 	s.cache.Close()
 }
 
-func (s *Server) Start(port int) {
+func (s *Server) Start(port int) error {
 	s.cache.Start()
 	dns.HandleFunc(".", s.handleRequest)
-	started := make(chan struct{})
+	started := make(chan error)
+	var ok bool
 	s.server = &dns.Server{
 		Addr:              fmt.Sprintf(":%d", port),
 		Net:               "udp",
-		NotifyStartedFunc: func() { close(started) },
+		NotifyStartedFunc: func() { ok = true; started <- nil },
 	}
-	go s.server.ListenAndServe()
-	<-started
+	var err error
+	go func() {
+		err = s.server.ListenAndServe()
+		if !ok {
+			started <- err
+		}
+	}()
+	return <-started
 }
 
 func (s *Server) handleRequest(w dns.ResponseWriter, r *dns.Msg) {

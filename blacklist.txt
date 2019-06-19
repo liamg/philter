@@ -180812,7 +180812,3 @@ zzzpooeaz-france.com
 zzzpooeaz-france.com
 zzzrtrcm2.com
 zzzrtrcm2.com
-# custom
-facebook.com
-vortex.data.microsoft.com
-supersonicads-a.akamaihd.net
