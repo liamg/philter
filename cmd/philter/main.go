@@ -29,7 +29,7 @@ func main() {
 	s := server.New(blacklist)
 
 	go func() {
-		ticker := time.NewTicker(time.Minute * 1)
+		ticker := time.NewTicker(time.Minute * 30)
 		defer ticker.Stop()
 		for {
 			<-ticker.C
