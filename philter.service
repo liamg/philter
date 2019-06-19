@@ -5,7 +5,7 @@ After=multi-user.target
 [Service]
 Type=simple
 ExecStart=/usr/bin/philter
-Restart=on-abort
+Restart=always
  
 [Install]
 WantedBy=multi-user.target
