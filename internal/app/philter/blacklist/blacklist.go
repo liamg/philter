@@ -2,6 +2,7 @@ package blacklist
 
 import (
 	"bufio"
+	"hash/fnv"
 	"io"
 	"net/http"
 	"os"
@@ -9,7 +10,13 @@ import (
 )
 
 type Blacklist struct {
-	entries []string
+	entries map[string]bool
+}
+
+func hash(s string) uint32 {
+	h := fnv.New32a()
+	h.Write([]byte(s))
+	return h.Sum32()
 }
 
 func FromURL(url string) (*Blacklist, error) {
@@ -21,6 +28,16 @@ func FromURL(url string) (*Blacklist, error) {
 	defer resp.Body.Close()
 
 	return fromReader(resp.Body)
+}
+
+func FromList(entries []string) *Blacklist {
+	domains := map[string]bool{}
+
+	for _, domain := range entries {
+		domains[domain] = true
+	}
+
+	return &Blacklist{entries: domains}
 }
 
 func FromFile(filepath string) (*Blacklist, error) {
@@ -35,7 +52,7 @@ func FromFile(filepath string) (*Blacklist, error) {
 
 func fromReader(r io.Reader) (*Blacklist, error) {
 
-	domains := []string{}
+	domains := map[string]bool{}
 
 	scanner := bufio.NewScanner(r)
 	for scanner.Scan() {
@@ -43,7 +60,7 @@ func fromReader(r io.Reader) (*Blacklist, error) {
 		if domain == "" || strings.HasPrefix(domain, "#") {
 			continue
 		}
-		domains = append(domains, domain)
+		domains[domain] = true
 	}
 
 	if err := scanner.Err(); err != nil {
@@ -56,10 +73,15 @@ func fromReader(r io.Reader) (*Blacklist, error) {
 
 func (b *Blacklist) Includes(domain string) bool {
 	domain = "." + strings.TrimSuffix(domain, ".")
-	for _, e := range b.entries {
-		if strings.HasSuffix(domain, "."+e) {
+	for {
+		_, ok := b.entries[domain]
+		if ok {
 			return true
 		}
+		if !strings.Contains(domain, ".") {
+			break
+		}
+		domain = domain[strings.Index(domain, ".")+1:]
 	}
 	return false
 }
