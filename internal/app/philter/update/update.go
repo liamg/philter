@@ -124,7 +124,7 @@ func Update() (bool, error) {
 	if err != nil {
 		return false, err
 	}
-	req.Header.Add("Accept
+	req.Header.Add("Accept", "application/octet-stream")
 
 	res, err := client.Do(req)
 	if err != nil {
